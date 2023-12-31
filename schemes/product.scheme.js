@@ -1,13 +1,14 @@
 const Joi = require('joi')
 
-/* 
+/*
 Se definen las características de los datos que estaremos enviando a través de las request.
 */
 
 
 const id = Joi.string().uuid()
-const name = Joi.string().alphanum().min(3).max(15)
+const name = Joi.string().min(3).max(15)
 const price = Joi.number().integer().min(10)
+const image = Joi.string().uri()
 
 // Se crean todos los esquemas, definiendo qué información es obligatoria o no
 
@@ -15,12 +16,14 @@ const price = Joi.number().integer().min(10)
 const createProductScheme = Joi.object({
     name: name.required(),
     price: price.required(),
+    image: image.required()
 })
 
 // Scheme de actualización
 const updateProductScheme = Joi.object({
     name: name,
     price: price,
+    image: image
 })
 
 // Scheme de consulta

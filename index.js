@@ -40,11 +40,11 @@ app.get('/nueva-ruta', (req, res) => {
     res.json([
         {
             name: 'Product 1',
-            price: 1000        
+            price: 1000
         },
         {
             name: 'Product 2',
-            price: 1500        
+            price: 1500
         },
     ])
 }) */
@@ -52,13 +52,13 @@ app.get('/nueva-ruta', (req, res) => {
 // se le pasa la aplicación como parámetro al enrutador
 routerApi(app)
 
-// Se usa app.use() para poner en funcionamiento los middlewares. 
+// Se usa app.use() para poner en funcionamiento los middlewares.
 // Es importante que los declaremos en el orden en que queremos que se ejecuten
 app.use(logErrors)
 app.use(boomErrorHandler)
 app.use(errorHandler)
 
-//tenemos que decirle a la aplicación que escuche eventos en un puerto en particular, 
+//tenemos que decirle a la aplicación que escuche eventos en un puerto en particular,
 //en este caso el 3000
 app.listen(port, () => {
     console.log('Mi puerto es: ', port)

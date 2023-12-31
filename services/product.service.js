@@ -1,4 +1,4 @@
-/* 
+/*
 Este archivo es un servicio que proveerá de información y funcones a las rutas.
 Se crea para tener la lógica de negocio en este lugar y no en los router.get() de
 los archivos de enturamiento, siguiendo el principio de SINGLE RESPONSABILITIES.
@@ -16,7 +16,7 @@ class ProductServices {
     constructor() {
         // Definimos un array products vacío para luego poblar con generate()
         this.products = []
-        
+
         // La siguiente línea permite generar todos los artículos de la tienda
         // y que se mantengan en la memoria del navegador, por lo menos hasta que se refresque el navegador.
         // Esto permite a su vez manipular el mismo array desde Insomnia.
@@ -65,7 +65,7 @@ class ProductServices {
         if (!product) {
             throw boom.notFound('product not found')
         }
-        // Se captura y se emite un error si el usuario intenta acceder a la información 
+        // Se captura y se emite un error si el usuario intenta acceder a la información
         // de un producto bloqueado
         if (product.isBlock) {
             throw boom.conflict('product not found by conflict')

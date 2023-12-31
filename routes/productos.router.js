@@ -1,4 +1,4 @@
-/* 
+/*
 Este archivo crea un router para nuestra aplicación
 y lo exporta. Es el router para todas las rutas relacionadas
 a productos
@@ -15,13 +15,22 @@ const {faker} = require('@faker-js/faker')
 const ProductServices = require('./../services/product.service')
 const services = new ProductServices()
 
+// Invocamos el middleware creado con el closure que detecta errores en el formato de los datos
+const validatorHandler = require('../middlewares/validator.handler')
+// Se incovan los esquemas de validación de datos creados con Joi
+const {
+  createProductScheme,
+  updateProductScheme,
+  getProductScheme
+} = require('../schemes/product.scheme')
+
 
 // Se usa faker para poblar con productos falsos aleatorios.
 // Se usa async y await para indicar que la respuesta no se obtiene
 // inmediatamente.
 router.get('/', async (req, res) => {
     // Se usa el método find() de services para obtener el array de artículos
-    const productos = await services.find()    
+    const productos = await services.find()
     res.json(productos)
 })
 
@@ -37,7 +46,11 @@ router.get('/filter', (req, res) => {
 // con un id específico. Para obtener el parámetro :id podemos acceder a él
 // a través de la propiedad params del express.request, y destructurarlo de la
 // siguiente manera:
-router.get('/:id', async (req, res, next) => {
+router.get(
+    '/:id',
+    // En el segundo argumento de la petición, pasamos el validatorHandler correspondiente
+    validatorHandler(getProductScheme, 'params'),
+    async (req, res, next) => {
     // Antes esta petición no tenía next, pero se le agregó porque se
     // está haciendo crashear a propósito la función findOne() de products.router.
     // La idea aquí es que al detectar el error en findOne() se use la función next
@@ -58,21 +71,25 @@ router.get('/:id', async (req, res, next) => {
                 {
                     id,
                     name: 'Product 2',
-                    price: 1500        
+                    price: 1500
                 },
             ])
-        } */        
+        } */
     } catch (error) {
         next(error)
     }
-    
+
 })
 
-// Request de tipo POST para modificar la información disponible. 
+// Request de tipo POST para modificar la información disponible.
 // En este caso se reemplaza la información de los productos con
 // un nuevo objeto de productos enviado a través de Insomnia en la
 // petición POST
-router.post('/', async (req, res) => {
+router.post(
+    '/',
+    // En el segundo argumento de la petición, pasamos el validatorHandler correspondiente
+    validatorHandler(createProductScheme, 'body'),
+    async (req, res) => {
     const body = req.body
     const newProduct = await services.create(body)
     res.status(200).json(newProduct)
@@ -80,10 +97,16 @@ router.post('/', async (req, res) => {
 
 // Con el siguiente endpoint podemos modificar el nombre del artículo 1212
 // y mandarle data que será usado en la actualización.
-// PUT se usa normalmente cuando queremos cambiar todos los atributos del 
+// PUT se usa normalmente cuando queremos cambiar todos los atributos del
 // artículo a cambiar, pero en realidad es por convención, porque si le
 // pasamos menos atributos igual funcionaría con PUT.
-router.patch('/:id', async (req, res, next) => {
+router.patch(
+    '/:id',
+    // En el segundo argumento de la petición, pasamos el validatorHandler correspondiente
+    // Se pueden pasar varios validadores considerando que los middlewares operan en forma secuencial
+    validatorHandler(getProductScheme, 'params'),
+    validatorHandler(updateProductScheme, 'body'),
+    async (req, res, next) => {
     // Recordemos que el método update de services arroja un error
     // si no encuentra el artículo con el index pasado como parámetro.
     // Por tanto se puede encerrar en un try catch tal como sigue:
@@ -94,7 +117,7 @@ router.patch('/:id', async (req, res, next) => {
         const body = req.body
         const updateProduct = await services.update(id, body)
         res.json(updateProduct)
-        
+
     } catch (error) {
         // Para que funcione con el error.handler
         next(error)
@@ -109,11 +132,11 @@ router.delete('/:id', async (req, res) => {
     res.json(message)
 })
 
-/* 
+/*
 En los endpoints anteriores hemos configurado lo que comúmenete se llama
 un CRUD = Create Read Update Delete. Hemos usado POST para crear un nuevo producto
 o productos, hemos usado GET para obtener datos y leerlos, PATCH y PUT para actualizar
 datos y hemos usado DELETE para eliminar artículos.
 */
 
-module.exports = router   
+module.exports = router
