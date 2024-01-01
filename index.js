@@ -9,9 +9,31 @@ const routerApi = require('./routes')
 // Se importan los middlewares para gestionar errores de la aplicación
 const {logErrors, boomErrorHandler, errorHandler} = require('./middlewares/error.handler')
 
+// Se importa CORS
+const cors = require('cors')
+
 // Se activa el middleware que permite recibir data
 // a través de una request de tipo POST.
 app.use(express.json())
+
+// Usamos cors en nuestra aplicación. Si sólo ponemos app.use(cors()) estamos permitiendo acceso desde cualquier
+// orígen.
+// En cambio, si definimos una whitelist y el objeto de 'options' y se lo pasamos a cors, estaremos limitando
+// los órigenes que podrán tener acceso.
+// El objeto options es obligatorio para el funcionamiento de cors
+const whitelist = ['http://localhost:8080', 'https://myapp.co']
+const options = {
+  origin: (origin, callback) => {
+    // Si el origin está en la whitelist, ejecute el callback sin ningún error y eviando true como segundo parámetro
+    if (whitelist.includes(origin)) {
+      callback(null, true)
+    } else {
+      // Si no está, envíe un error al callback
+      callback(new Error('No permitido'))
+    }
+  }
+}
+app.use(cors(options))
 
 // invoco a la dependencia faker.
 // Recordar que se instaló la versión 5.5.3 de faker ya que la última
@@ -53,7 +75,11 @@ app.get('/nueva-ruta', (req, res) => {
 routerApi(app)
 
 // Se usa app.use() para poner en funcionamiento los middlewares.
-// Es importante que los declaremos en el orden en que queremos que se ejecuten
+// Es importante que los declaremos en el orden en que queremos que se ejecuten.
+// Las siguientes líneas custodian la aplicación y le dicen al usuario cualquier
+// error que se llegue a generar.
+// Primero se loguea, luego verifica si es error tipo boom, y si no, lo muestra en
+// pantalla con el middleware errorHandler.
 app.use(logErrors)
 app.use(boomErrorHandler)
 app.use(errorHandler)

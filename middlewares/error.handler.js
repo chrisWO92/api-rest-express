@@ -1,3 +1,4 @@
+
 /* Middleware de tipo error: son aquellos que invocan a next
 con el error como parámetro de la misma. Los errores se gestionan
 en este tipo de middlewares y se transfieren a otras estancias
@@ -11,7 +12,7 @@ function logErrors (err, req, res, next) {
 
 /* Este otro middleware también es del tipo error pero
 no sirve para loguear sino para darle un formato al error.
-Vease que este middleware no ejecuta next y sin embargo de le 
+Vease que este middleware no ejecuta next y sin embargo se le
 pasa como parámetro. Esto es porque definir next como cuarto
 parámetro es necesario para que la aplicación identifique
 que queremos gestionar esta función como un middleware. */
