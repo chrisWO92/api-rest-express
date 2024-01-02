@@ -12,7 +12,7 @@ const {faker} = require('@faker-js/faker')
 // Esto permite generarun array de artículos que se mantendrá
 // en la memoria del navegador sin modificarse, ya que hace parte
 // de una instancia de una clase.
-const ProductServices = require('./../services/product.service')
+const ProductServices = require('../services/product.service')
 const services = new ProductServices()
 
 // Invocamos el middleware creado con el closure que detecta errores en el formato de los datos
