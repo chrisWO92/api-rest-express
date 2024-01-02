@@ -1,6 +1,6 @@
 # API REST CON EXPRESS JS
 Primero que todo se ejecuta el comando npm init -y y el comando git init.
-También se crean los archivos .gitignore, .editorconfig y .eslintrc.json, 
+También se crean los archivos .gitignore, .editorconfig y .eslintrc.json,
 que son usados para definir parámetros del entorno de desarrollo.
 
 Luego se deben definir los contenidos de estos archivos, que serán objetos
@@ -8,7 +8,7 @@ entre llaves {} con una serie de pares llave-valor que definen parámetros para
 nuestro entorno de desarrollo.
 
 En el package.json definimos unos comandos para correr nodemon cuando usamos el
-comando "npm run dev", y debemos también instalar nodemon y otras configuraciones 
+comando "npm run dev", y debemos también instalar nodemon y otras configuraciones
 eslint de prettier que nos permitirán trabajar mejor.
 
 Estas caracterísitcas las tenemos con el siguiente comando:
@@ -24,7 +24,7 @@ POST: Creación
 DELETE: Eliminación
 
 ### GET
-Los endpoints tipo GET deberían apuntar a rutas del tipo /products/{id}, es decir, 
+Los endpoints tipo GET deberían apuntar a rutas del tipo /products/{id}, es decir,
 que antes de apuntar al producto específico, debemos pasar por el conjunto de
 productos cuyo nombre debe estar en plural.
 
@@ -36,7 +36,7 @@ Se instala como npm i @hapi/boom
 Sirve para manejar los tipos de errores.
 En esta aplicacion, boom se usa en el product.service.js para emitir un error cuando se intenta encontrar
 un producto pero el id no existe. Por ende, también se envían errores de tipo boom cuando se quiere actualizar,
-y cuando se quiere borrar un producto. 
+y cuando se quiere borrar un producto.
 
 ## JOI
 Siempre que le vamos a enviar datos al servidor a través de requests debemos asegurarnos
@@ -59,6 +59,7 @@ npm i cors
 Debemos instalarlo y llamarlo en nuestra aplicación, en el index.js. Podemos optar por darle acceso a todos los orígenes
 que se quieran conectar, en caso que seamos una API pública, o podemos definir ciertos orígenes permitidos para que sólo esos puedan obtener la información.
 
-
+## Deployment a Heroku
+Debemos crear una cuenta en Heroku y luego seguir los pasos que están descritos en la documentación de Heroku.
 
 

@@ -24,7 +24,10 @@ function errorHandler (err, req, res, next) {
     })
 }
 
-/* Middleware para determinar si un error es detectado por la librería boom */
+/* 
+Middleware para determinar si un error es detectado por la librería boom.
+Si no es así, le pasa el error al siguiente middleware.
+*/
 function boomErrorHandler (err, req, res, next) {
     console.log('boomErrorHandler')
     // El error trae una propiedad "isBoom" que es true cuando el error es de tipo boom
@@ -35,7 +38,8 @@ function boomErrorHandler (err, req, res, next) {
         // y trae el mensaje del error en "payload"
         res.status(output.statusCode).json(output.payload)
     } else {
-        // Si el error no es de tipo boom, se ejecutan los otros middlewares
+        // Si el error no es de tipo boom, se ejecutan los otros middlewares,
+        // en este caso sería el errorHandler()
         next(err)
     }
 }
