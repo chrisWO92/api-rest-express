@@ -28,19 +28,15 @@ const {
 // Se usa faker para poblar con productos falsos aleatorios.
 // Se usa async y await para indicar que la respuesta no se obtiene
 // inmediatamente.
+
+// todos los endpoints estáticos deben ir antes de los dinámicos,
+// en caso contrario tendremos conflictos
 router.get('/', async (req, res) => {
     // Se usa el método find() de services para obtener el array de artículos
     const productos = await services.find()
     res.json(productos)
 })
 
-// todos los endpoints estáticos deben ir antes de los dinámicos,
-// en caso contrario tendremos conflictos
-router.get('/filter', (req, res) => {
-    // si ponemos este endpoint luego del /productos/:id
-    // nos tomará /filter como si fuera un id
-    res.send('Esto es un filter')
-})
 
 // El siguiente endpoint sirve para obtener un producto en particular
 // con un id específico. Para obtener el parámetro :id podemos acceder a él

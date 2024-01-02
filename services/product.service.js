@@ -43,6 +43,7 @@ class ProductServices {
     create(data) {
         const newProduct = {
             id : faker.string.uuid(),
+            isBlock: faker.datatype.boolean(),
             ...data
         }
         this.products.push(newProduct)

@@ -10,7 +10,7 @@ const routerApi = require('./routes')
 const {logErrors, boomErrorHandler, errorHandler} = require('./middlewares/error.handler')
 
 // Se importa CORS
-const cors = require('cors')
+// const cors = require('cors')
 
 // Se activa el middleware que permite recibir data
 // a través de una request de tipo POST.
@@ -21,19 +21,19 @@ app.use(express.json())
 // En cambio, si definimos una whitelist y el objeto de 'options' y se lo pasamos a cors, estaremos limitando
 // los órigenes que podrán tener acceso.
 // El objeto options es obligatorio para el funcionamiento de cors
-const whitelist = ['http://localhost:8080', 'https://myapp.co']
-const options = {
-  origin: (origin, callback) => {
-    // Si el origin está en la whitelist, ejecute el callback sin ningún error y eviando true como segundo parámetro
-    if (whitelist.includes(origin)) {
-      callback(null, true)
-    } else {
-      // Si no está, envíe un error al callback
-      callback(new Error('No permitido'))
-    }
-  }
-}
-app.use(cors(options))
+// const whitelist = ['http://localhost:8080', 'https://myapp.co']
+// const options = {
+//   origin: (origin, callback) => {
+//     // Si el origin está en la whitelist, ejecute el callback sin ningún error y eviando true como segundo parámetro
+//     if (whitelist.includes(origin)) {
+//       callback(null, true)
+//     } else {
+//       // Si no está, envíe un error al callback
+//       callback(new Error('No permitido'))
+//     }
+//   }
+// }
+// app.use(cors(options))
 
 // invoco a la dependencia faker.
 // Recordar que se instaló la versión 5.5.3 de faker ya que la última
