@@ -1,5 +1,5 @@
-/* 
-Importa el products.router y se lo pasa como parámetro a 
+/*
+Importa el products.router y se lo pasa como parámetro a
 app.use(). Lo qu hace esto es tomar todas las rutas relacionadas
 a productos y las enrutará en la aplicación, de manera que podamos
 acceder a su información a través del navegador

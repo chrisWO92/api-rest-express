@@ -19,7 +19,7 @@ const createCategoryScheme = Joi.object({
     description: description.required(),
     //price: price.required(),
     //image: image.required(),
-    // isBlock: isBlock.required()
+    isBlock: isBlock.required()
 })
 
 // Scheme de actualización

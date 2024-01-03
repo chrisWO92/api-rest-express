@@ -14,7 +14,7 @@ class CategoryServices {
                 description: faker.commerce.productAdjective(),
                 isBlock: faker.datatype.boolean(),
             })
-        } 
+        }
     }
 
     create(data) {
@@ -34,11 +34,6 @@ class CategoryServices {
         })
 
     }
-
-    async findOne(id) {
-        return this.categories.find(category => category.id === id)
-    }
-
     async findOne(id) {
         // Encuentra la categoría que tiene un id pasado como parámetro
         const category = this.categories.find(category => category.id === id)

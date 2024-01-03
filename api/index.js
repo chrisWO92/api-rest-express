@@ -10,7 +10,7 @@ const routerApi = require('./routes')
 const {logErrors, boomErrorHandler, errorHandler} = require('./middlewares/error.handler')
 
 // Se importa CORS
-// const cors = require('cors')
+const cors = require('cors')
 
 // Se activa el middleware que permite recibir data
 // a través de una request de tipo POST.
