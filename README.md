@@ -52,4 +52,59 @@ Debemos instalarlo y llamarlo en nuestra aplicación, en el ``index.js``. Podemo
 ## Deployment a Heroku
 Debemos crear una cuenta en Heroku y luego seguir los pasos que están descritos en la documentación de Heroku.
 
+## Docker
+Se debe descargar Docker y asegurarse que se encuentra habilitado el uso con WSL. Posteriormente es necesario crear un archivo llamado `docker-compose.yml` y definir parámetros de configuración (ver archivo).
 
+Para levantar el servicio en docker:
+`docker-compose up -d <nombre-servicio>` que es el nombre usado en el `docker-compose.yml`. En este caso es `postgres`
+
+Para verificar los servicios activos:
+`docker-compose ps`
+
+Para bajar los servicios activos:
+`docker-compose down`
+
+Los contenedores son stateless, lo que es un problema para las bases de datos, ya que estas deben tener estados. Por esta razón debemos indicarle a docker un 'volumen' para nuestra base de datos. Esto se hace en el `docker-compose.yml` definiendo la carpeta en la que queremos guardar la información de la base de datos, y luego debemos crear dicha carpeta en nuestro repositorio. En este caso la carpeta se llama `postgress_data`. Esta carpeta debemos agregarla al gitignore ya que no queremos que los datos que contiene se suban al repositorio remoto de github.
+
+De esta forma se logra tener persistencia de datos con docker.
+
+Para conectar a la base de datos desde la terminal:
+`docker-compose exec postgres bash`
+
+Cuando se ejecute este comando, podemos conectarnos con la base de datos:
+`psql -h localhost -d <nombre-base-datos> -U <usuario>`
+`psql -h localhost -d api_express_docker -U cristian`
+
+Para ver relaciones de la base de datos:
+`\d+`
+
+Para salir de la base de datos:
+`\q`
+
+Sin embargo, también podemos conectarnos a través de un motor gráfico para que sea más sencillo. El que suele usarse es `pgAdmin` ya que corre bajo el navegador. Para poder usarlo debemos crear un servicio adicional en el archivo `docker-compose.yml`
+
+Luego, para levantar el servicio de pgadmin, se ejecuta el siguiente comando:
+`docker-compose up -d pgadmin`
+
+Para crear una base de datos en pgadmin debemos primero crear un server. Para eso vamos a necesitar el IP sobre el que se encuentra corriendo postgres. Para saber esto, ejecutamos el comando:
+`docker ps` que es lo mismo que `docker-compose ps` pero que muestra más detalles. Dentro de estos detalles está el id de los servicios.
+
+Cuando tenemos el id, hacemos `docker inspect <id>` y en la información que se muestra a continuación podemos ver el IP.
+
+Esto lo ponemos en el formulario de creación de un server y le damos "save".
+
+### Creación de la primera DB
+En la opción "Query tool" ingresamos la siguiente instrucción para crear una tabla vacía:
+
+CREATE TABLE tasks (
+    id serial PRIMARY KEY,
+    title VARCHAR (255) NOT NULL,
+    completed boolean DEFAULT false
+)
+
+Presionamos el botón de "play" y veremos que ahora nos aparece una tabla en Schemas->public->Tables->tasks
+Le damos click derecho, View All Rows y nos mostrará una vista de la tabla recién creada.
+
+Esto también lo podemos ver en la terminal con el comando `docker-compose exec postgres bash` y `\d+`
+
+### Integración Node Postgres
