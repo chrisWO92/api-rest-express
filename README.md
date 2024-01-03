@@ -1,4 +1,4 @@
-# API REST CON EXPRESS JS
+# API REST CON EXPRESS JS Y BASES DE DATOS CON POSTGRESQL
 Primero que todo se ejecuta el comando `npm init -y` y el comando `git init`. También se crean los archivos .gitignore, .editorconfig y .eslintrc.json, que son usados para definir parámetros del entorno de desarrollo.
 
 Luego se deben definir los contenidos de estos archivos, que serán objetos entre llaves {} con una serie de pares llave-valor que definen parámetros para nuestro entorno de desarrollo.
