@@ -1,12 +1,21 @@
 const {faker} = require('@faker-js/faker')
 const boom = require('@hapi/boom')
 
+// Importamos la librería que conecta con la DB
+// const getConnection = require('../../libs/postgres')
+const pool = require('../../libs/postgres.pool')
+
 class UserServices {
     constructor() {
         this.users = []
         this.generate()
+        this.pool = pool
+        this.pool.on('error', (err) => console.error(err))
     }
 
+    // De esta manera se usaba la librería faker para generar datos random.
+    // Ahora se usa una conexión con una DB de postgres cuyos datos insertamos
+    // nosotros mismos.
     generate() {
         for (let i = 0; i < 20; i++) {
             this.users.push({
@@ -29,12 +38,26 @@ class UserServices {
         return newUser
     }
 
-    find() {
-        return new Promise((res, rej) => {
+    async find() {
+        // Antes de usar la librería pg
+        /* return new Promise((res, rej) => {
             setTimeout(() => {
                 res(this.users)
             }, 3000)
-        })
+        }) */
+
+        // Primer uso de la librería pg
+        /* // Usamos getConnecton para crear un cliente de conexión con la DB de postgres
+        const client = await getConnection()
+        // Con el cliente ejecutamos queries de consulta a la DB
+        const rta = await client.query('SELECT * FROM tasks')
+        // Retornamos las filas de la tabla generada como respuesta a la query
+        return rta.rows */
+
+        // Optimización de pg con pool de conexiones
+        const query = 'SELECT * FROM tasks'
+        const rta = await this.pool.query(query)
+        return rta.rows
 
     }
 

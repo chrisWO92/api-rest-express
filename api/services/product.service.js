@@ -11,6 +11,9 @@ const {faker} = require('@faker-js/faker')
 // Importamos el manejador de errores
 const boom = require('@hapi/boom')
 
+// Importamos el pool de conexiones
+const pool = require('../../libs/postgres.pool')
+
 class ProductServices {
 
     constructor() {
@@ -21,6 +24,10 @@ class ProductServices {
         // y que se mantengan en la memoria del navegador, por lo menos hasta que se refresque el navegador.
         // Esto permite a su vez manipular el mismo array desde Insomnia.
         this.generate()
+
+        // Usamos pool
+        this.pool = pool
+        this.pool.on('error', (err) => console.error(err))
     }
 
     generate() {
@@ -51,12 +58,18 @@ class ProductServices {
     }
 
     // retorna todos los productos
-    find() {
-        return new Promise((res, rej) => {
+    async find() {
+      // Antes de usar pg
+        /* return new Promise((res, rej) => {
             setTimeout(() => {
                 res(this.products)
             }, 3000)
-        })
+        }) */
+
+        // Usando pg
+        const query = 'SELECT * FROM tasks'
+        const rta = await this.pool.query(query)
+        return rta.rows
     }
 
     // retorna el producto con el id pasado como parámetro
