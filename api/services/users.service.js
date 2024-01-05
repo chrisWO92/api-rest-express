@@ -3,14 +3,18 @@ const boom = require('@hapi/boom')
 
 // Importamos la librería que conecta con la DB
 // const getConnection = require('../../libs/postgres')
-const pool = require('../../libs/postgres.pool')
+// const pool = require('../../libs/postgres.pool')
+
+// importamos sequilize que reemplazará a pool
+const sequelize = require('../../libs/sequelize')
+
 
 class UserServices {
     constructor() {
         this.users = []
         this.generate()
-        this.pool = pool
-        this.pool.on('error', (err) => console.error(err))
+        // this.pool = pool
+        // this.pool.on('error', (err) => console.error(err))
     }
 
     // De esta manera se usaba la librería faker para generar datos random.
@@ -54,10 +58,15 @@ class UserServices {
         // Retornamos las filas de la tabla generada como respuesta a la query
         return rta.rows */
 
-        // Optimización de pg con pool de conexiones
+       /*  // Optimización de pg con pool de conexiones
         const query = 'SELECT * FROM tasks'
         const rta = await this.pool.query(query)
-        return rta.rows
+        return rta.rows */
+
+        // Optimización usando sequelize
+        const query = 'SELECT * FROM tasks'
+        const [data] = await sequelize.query(query)
+        return data
 
     }
 
