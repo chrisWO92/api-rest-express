@@ -52,7 +52,10 @@ Debemos instalarlo y llamarlo en nuestra aplicación, en el ``index.js``. Podemo
 ## Deployment a Heroku
 Debemos crear una cuenta en Heroku y luego seguir los pasos que están descritos en la documentación de Heroku.
 
-## Docker
+## Bases de datos
+Cómo configurar y usar bases de datos con Nodejs, Postgres y Docker. 
+
+### Docker
 Se debe descargar Docker y asegurarse que se encuentra habilitado el uso con WSL. Posteriormente es necesario crear un archivo llamado `docker-compose.yml` y definir parámetros de configuración (ver archivo).
 
 Para levantar el servicio en docker:
@@ -87,7 +90,7 @@ Luego, para levantar el servicio de pgadmin, se ejecuta el siguiente comando:
 `docker-compose up -d pgadmin`
 
 Para crear una base de datos en pgadmin debemos primero crear un server. Para eso vamos a necesitar el IP sobre el que se encuentra corriendo postgres. Para saber esto, ejecutamos el comando:
-`docker ps` que es lo mismo que `docker-compose ps` pero que muestra más detalles. Dentro de estos detalles está el id de los servicios.
+`docker ps` que es lo mismo que `docker-compose ps` pero que muestra más detalles. Dentro de estos detalles está el id de los servicios. Debemos tomar el id del servicio postgres.
 
 Cuando tenemos el id, hacemos `docker inspect <id>` y en la información que se muestra a continuación podemos ver el IP.
 
@@ -108,3 +111,44 @@ Le damos click derecho, View All Rows y nos mostrará una vista de la tabla reci
 Esto también lo podemos ver en la terminal con el comando `docker-compose exec postgres bash` y `\d+`
 
 ### Integración Node Postgres
+Para conectar Node y Postgres tenemos que usar una librería llamada `pg`. Podemos encontrarla en internet como node-postgres y ver la documentación. Se instala con `npm install pg`.
+
+Luego creamos una carpeta nueva, que será una capa más de nuestra arquitectura, y le daremos el nombre ``libs`` para indicar que aquí estarán guardadas las librerías.
+
+En esta carpeta creamos un archivo `postgres.js` que contiene la función para crear un cliente de conexión a la base de datos de postgres que creamos previamente, llamada "tasks", que por el momento está vacía.
+
+Para hacer la conexión, importamos esta función que llamamos `getConnection()`, en el archivo de `users.service.js`. Podría ser en cualquiera de los services, pero elegimos este como ejemplo. 
+
+Se importa la función y se usa en el método `find()`. En este se crea un cliente, y con este se ejecuta una query de consult a la DB de postgres donde tenemos las tareas. Si la tenemos vacía, en Insomnia la GET Request para Users nos traerá un array vacío, pero si ya hemos empezado a poblar esta DB, nos traerá las "rows" que hayamos incluído.
+
+### Clean Arquitechture
+En este momento del código podemos observar que hemos creado distintas carpetas, cada una con su función particular. Tenemos una para los servicios, otra para los esquemas, otra para el enrutamiento, y otra para los controladores o middlewares. A esto se le conoce como la filosofía de código "Clean Arqutechture".
+
+Clean Arquitechture es una filosofía de diseño que separa los elementos deun diseño en anillos de niveles. El objetivo principal es encapsular la lógica de negocio y mantenerla separada del mecanismo de entrega de datos.
+
+El anillo de niveles de Clean Arquitechture tiene el siguiente orden de adentro hacia afuera:
+
+Entidades: Reglas de negocio -> Casos de Uso: Reglas de Negocio de la app -> Controladores, Presentadores, Puertas de Enlace: Interface Adapters -> DB, Devices, Web, UI, External Interfaces: Frameworks & Drivers.
+
+### Manejando pool de conexiones
+En el código hemos incluído la función `getConnection()` en el método `find()` del servicio de users. Sin embargo, la manera en la que lo hicimos hace que cada vez que ejecutamos la consulta, se cree una conexión nueva, lo cual no es eficiente. 
+
+Por este motivo, postgre sugiee el uso de una funcionalidad que llaman POOLING. 
+
+Un pool de conexiones es un conjunto limitado de conexiones a una base de datos, que es manejado por un servidor de aplicaciones de forma tal, que dichas conexiones pueden ser reutilizadas por los diferentes usuarios. De esta forma gestionamos las conexiones de manera más óptima, evitando crear clientes por cada consulta.
+
+### Variables de ambiente en Nodejs
+Actualmente en el código estamos escribiendo la información relacionada a usuario, contraseña, y demás parámetros necesarios para conectarnos a nuestra base de datos de postgres. Esto es una mala práctica ya que deja totalmente expuesta nuestra información. Para corregirlo, debemos crear variables de entorno e inyectarle estas variables a la conexión con la DB a través del entorno. Esto hace que nuestra aplicación sea más segura. 
+
+Para esto creamos la carpeta `config` y creamos el archivo `config.js`. En este achivo definimos todas las variables ó parámetros que necesitamos para conectarnos con la DB, definiendolas como variables de entorno. Luego simplemente las importamos en nuestro archivo de creación de la pool de conexiones y las usamos para crear la URI de conexión.
+
+Ahora debemos crear el archivo ``.env``. Este es un archivo muy delicado ya que tiene información sensible, por lo que gitignore lo ignora y no lo toma en cuenta para subirlo al repositorio remoto. Sin embargo, es una buena práctica crearun archivo `.env.example` para indicarle a otros programadores la manera en la que queremos que nos envíen las variables de entorno.  
+
+Entonces, creamos el archivo `.env` y definimos todas nuestras variables de entorno con la información que antes le pasabamos al pool de conexiones. Luego, tenemos que usar la librería `dotenv` que sirve para leer las variables del archivo `.env` y las carga en el proceso de node (process).
+
+Instalamos con `npm i dotenv`.
+
+Y para usarla, ponemos al principio del archivo `config.js`, la siguiente línea que carga las variables del archivo `.env` en el proceso de node, para poderlas invocar como `process.env.VARIABLE`:
+
+`require('dotenv').config()`
+
