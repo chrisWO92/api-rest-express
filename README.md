@@ -152,3 +152,5 @@ Y para usarla, ponemos al principio del archivo `config.js`, la siguiente línea
 
 `require('dotenv').config()`
 
+### Primer modelo en Sequelize
+Definir los esquemas de bases de datos y crearlas desde nuestro ORM. Se crea una nueva carpeta que se encargará de todo lo relacionado a las bases de datos.

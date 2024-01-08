@@ -1,6 +1,9 @@
 const {faker} = require('@faker-js/faker')
 const boom = require('@hapi/boom')
 
+// importamos sequilize que reemplazará a pool
+const sequelize = require('../../libs/sequelize')
+
 class CategoryServices {
     constructor() {
         this.categories = []
@@ -26,12 +29,17 @@ class CategoryServices {
         return newCategory
     }
 
-    find() {
-        return new Promise((res, rej) => {
+    async find() {
+        /* return new Promise((res, rej) => {
             setTimeout(() => {
                 res(this.categories)
             }, 3000)
-        })
+        }) */
+
+        // Optimización usando sequelize
+        const query = 'SELECT * FROM tasks'
+        const [data] = await sequelize.query(query)
+        return data
 
     }
     async findOne(id) {

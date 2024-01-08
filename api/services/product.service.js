@@ -12,7 +12,10 @@ const {faker} = require('@faker-js/faker')
 const boom = require('@hapi/boom')
 
 // Importamos el pool de conexiones
-const pool = require('../../libs/postgres.pool')
+// const pool = require('../../libs/postgres.pool')
+
+// importamos sequilize que reemplazará a pool
+const sequelize = require('../../libs/sequelize')
 
 class ProductServices {
 
@@ -26,8 +29,8 @@ class ProductServices {
         this.generate()
 
         // Usamos pool
-        this.pool = pool
-        this.pool.on('error', (err) => console.error(err))
+        // this.pool = pool
+        // this.pool.on('error', (err) => console.error(err))
     }
 
     generate() {
@@ -66,10 +69,15 @@ class ProductServices {
             }, 3000)
         }) */
 
-        // Usando pg
+        /* // Usando pg
         const query = 'SELECT * FROM tasks'
         const rta = await this.pool.query(query)
-        return rta.rows
+        return rta.rows */
+
+        // Optimización usando sequelize
+        const query = 'SELECT * FROM tasks'
+        const [data] = await sequelize.query(query)
+        return data
     }
 
     // retorna el producto con el id pasado como parámetro
