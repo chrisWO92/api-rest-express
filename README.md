@@ -161,3 +161,8 @@ Sirve para hacer un mapeo de la estructura de bases datos relacionales. Nos perm
 Usando Sequilize gestionamos la conexión, por lo que reemplaza a pool.
 
 Se instala con `npm install --save sequelize`. Además también debemos instalar `npm install --save pg pg-hstore`. `pg` ya se había instalado anteriormente por lo que sólo se deberá instalar `pg-hstore`.
+
+Debemos crear una carpeta /db con una subcarpeta /db/models, en la cual crearemos un archivo llamado `user.model.js` que nos permite crear el modelo de tabla para los usuarios.
+
+En el index.js de la carpeta db creamos una función setupModels, a la cual le pasamos todos los modelos creamos para los distintos tipos de datos que necesitamos (categories, users, products).
+
