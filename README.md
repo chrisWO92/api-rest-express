@@ -152,5 +152,12 @@ Y para usarla, ponemos al principio del archivo `config.js`, la siguiente línea
 
 `require('dotenv').config()`
 
-### Primer modelo en Sequelize
-Definir los esquemas de bases de datos y crearlas desde nuestro ORM. Se crea una nueva carpeta que se encargará de todo lo relacionado a las bases de datos.
+## Sequelize
+Es una librería que nos permite optimizar aún más la conexión con la DB. Es más avanzado que la librería `pool`.
+
+### ORM: Object Relational Model
+Sirve para hacer un mapeo de la estructura de bases datos relacionales. Nos permite abstraernos de las consultas en lenguaje SQL ya que es agnóstico. Es decir, se puede usar con cualquier tipo de base de datos (Postgres, MySQL, MariaDB).
+
+Usando Sequilize gestionamos la conexión, por lo que reemplaza a pool.
+
+Se instala con `npm install --save sequelize`. Además también debemos instalar `npm install --save pg pg-hstore`. `pg` ya se había instalado anteriormente por lo que sólo se deberá instalar `pg-hstore`.

@@ -2,7 +2,7 @@
 Esquemas y modelos de Bases de Datos
 */
 
-const {Model, DataTypes, Sequelize} = require('sequile')
+const {Model, DataTypes, Sequelize} = require('sequelize')
 
 // normalmente se define el nombre en minúscula y en plural
 const USER_TABLE = 'users'

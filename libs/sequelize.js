@@ -1,6 +1,7 @@
 const {Sequelize} = require('sequelize')
 
 const {config} = require('../config/config')
+const setupModels = require('../db/models')
 
 const USER = encodeURIComponent(config.dbUser)
 const PASSWORD = encodeURIComponent(config.dbPassword)
@@ -14,5 +15,12 @@ const sequelize = new Sequelize(URI, {
     dialect: 'postgres',
     logging: true,
 })
+
+// Justo después de crear la instancia, invocamos setupmodels
+// y le pasamos la conexión sequelize
+setupModels(sequelize)
+
+// Crear estructura con modelos. Los lee y los organiza
+sequelize.sync()
 
 module.exports = sequelize
