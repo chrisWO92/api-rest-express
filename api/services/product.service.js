@@ -15,7 +15,13 @@ const boom = require('@hapi/boom')
 // const pool = require('../../libs/postgres.pool')
 
 // importamos sequilize que reemplazará a pool
-const sequelize = require('../../libs/sequelize')
+// const sequelize = require('../../libs/sequelize')
+
+// importamos modelos de libs/sequelize.
+// Al ejecutar setupModels(sequelize) y sequelize.sync(),
+// Se genera models dentro del sequilize exportado en este archivo
+const {models} = require('../../libs/sequelize')
+
 
 class ProductServices {
 
@@ -74,10 +80,13 @@ class ProductServices {
         const rta = await this.pool.query(query)
         return rta.rows */
 
-        // Optimización usando sequelize
+        /* // Optimización usando sequelize
         const query = 'SELECT * FROM tasks'
         const [data] = await sequelize.query(query)
-        return data
+        return data */
+
+        const rta = models.Product.findAll()
+        return rta
     }
 
     // retorna el producto con el id pasado como parámetro

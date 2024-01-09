@@ -16,7 +16,7 @@ const {models} = require('../../libs/sequelize')
 class UserServices {
     constructor() {
         this.users = []
-        this.generate()
+        // this.generate()
         // this.pool = pool
         // this.pool.on('error', (err) => console.error(err))
     }
@@ -24,7 +24,7 @@ class UserServices {
     // De esta manera se usaba la librería faker para generar datos random.
     // Ahora se usa una conexión con una DB de postgres cuyos datos insertamos
     // nosotros mismos.
-    generate() {
+    /* generate() {
         for (let i = 0; i < 20; i++) {
             this.users.push({
                 id: faker.string.uuid(),
@@ -35,14 +35,18 @@ class UserServices {
                 isBlock: faker.datatype.boolean(),
             })
         }
-    }
+    } */
 
-    create(data) {
-        const newUser = {
+    async create(data) {
+        // Antes de models.User
+        /* const newUser = {
             id : faker.string.uuid(),
             ...data
         }
         this.users.push(newUser)
+        return newUser */
+
+        const newUser = await models.User.create(data)
         return newUser
     }
 
@@ -81,7 +85,8 @@ class UserServices {
     }
 
     async findOne(id) {
-        // Encuentra el user que tiene un id pasado como parámetro
+        // Antes de models.User
+        /* // Encuentra el user que tiene un id pasado como parámetro
         const user = this.users.find(user => user.id === id)
         if (!user) {
             throw boom.notFound('user not found')
@@ -91,13 +96,22 @@ class UserServices {
         if (user.isBlock) {
             throw boom.conflict('user not found by conflict')
         }
+        return user */
+
+        // Después de models.user
+        // find by primary key
+        const user = models.User.findByPk(id)
+        if (!user) {
+            throw boom.notFound('user not found')
+        }
         return user
     }
 
     // actualiza los parámetros de user cuyo id es el pasado como
     // parámetro y retorna la categoría actualizada
     async update(id, changes) {
-        const index = this.users.findIndex(user => user.id === id)
+        // Antes de models.User
+        /* const index = this.users.findIndex(user => user.id === id)
         if (index === -1) {
             // throw new Error('user not found')
             // Se usa boom para indicar que este error debe ser tratado como
@@ -114,20 +128,31 @@ class UserServices {
             ...user,
             ...changes
         }
-        return this.users[index]
+        return this.users[index] */
+
+        // Con models.User
+        const user = this.findOne(id)
+        const rta = await user.update(changes)
+        return rta
     }
 
     // elimina el usuario con el id pasado como parámetro y retorna un
     // mensaje de true.
     async delete(id) {
-        const index = this.users.findIndex(user => user.id === id)
+        // Antes del model.User
+        /* const index = this.users.findIndex(user => user.id === id)
         if (index === -1) {
             // throw new Error('user not found')
             throw boom.notFound('user not found')
 
         }
         this.users.splice(index, 1)
-        return {message: true}
+        return {message: true} */
+
+        // Con models.User
+        const user = this.findOne(id)
+        await user.destroy()
+        return {id}
     }
 }
 

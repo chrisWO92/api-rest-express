@@ -173,3 +173,5 @@ Luego importamos setupModels en el archivo `sequelize.js` y ejecutamos las sigui
 Y en el archivo `user.service.js`, en el método `find()`, reemplazamo el uso de `sequelize` por el uso de `models.User.findAll()`. Cuando refrescamos el pgadmin nos damos cuenta que apareció una nueva tabla llamada `users`. Tiene los campos, pero no tiene ninguna columna, por lo que si hacemos una consulta de tipo GET, nos traerá un array vacío. Si le agregamos algunas filas, en Insomnia nos traerá esos datos.
 
 Con esto ya tendremos creado nuestro primer modelo ORM y estaremos usando programacón orientadaa objetos para hacer nuestras consultas.
+
+ESTOY EN PROCESO DE HACER EL CRUD CON MODELS DE SEQUELIZE

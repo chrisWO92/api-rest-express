@@ -5,7 +5,7 @@ Se definen las características de los datos que estaremos enviando a través de
 */
 
 
-const id = Joi.string().uuid()
+const id = Joi.number().integer()
 const name = Joi.string()
 const lastName = Joi.string()
 const sex = Joi.string()
