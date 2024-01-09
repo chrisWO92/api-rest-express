@@ -6,29 +6,25 @@ Se definen las características de los datos que estaremos enviando a través de
 
 
 const id = Joi.number().integer()
-const name = Joi.string()
-const lastName = Joi.string()
-const sex = Joi.string()
-const jobTitle = Joi.string()
-const isBlock = Joi.boolean()
+const email = Joi.string()
+const password = Joi.string()
+const createdAt = Joi.string()
 
 
 // Se crean todos los esquemas, definiendo qué información es obligatoria o no
 
 // Scheme de creación
 const createUserScheme = Joi.object({
-    name: name.required(),
-    lastName: lastName.required(),
-    sex: sex.required(),
-    jobTitle: jobTitle.required(),
-    isBlock: isBlock.required()
+    email: email.required(),
+    password: password.required(),
+    createdAt: createdAt.required(),
 })
 
 // Scheme de actualización
 const updateUserScheme = Joi.object({
-    name: name,
-    lastName: lastName,
-    sex: sex
+    email: email,
+    password: password,
+    createdAt: createdAt
 })
 
 // Scheme de consulta

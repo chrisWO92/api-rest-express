@@ -32,14 +32,14 @@ class ProductServices {
         // La siguiente línea permite generar todos los artículos de la tienda
         // y que se mantengan en la memoria del navegador, por lo menos hasta que se refresque el navegador.
         // Esto permite a su vez manipular el mismo array desde Insomnia.
-        this.generate()
+        // this.generate()
 
         // Usamos pool
         // this.pool = pool
         // this.pool.on('error', (err) => console.error(err))
     }
 
-    generate() {
+    /* generate() {
         const limit = 100
         // productos?size=10 muestra 10 productos
         for (let i = 0; i < limit; i++) {
@@ -54,15 +54,20 @@ class ProductServices {
                 // se pueden agregar más atributos falsos a cada producto
             })
     }
-    }
+    } */
 
-    create(data) {
-        const newProduct = {
+    async create(data) {
+        // Antes de model.Product
+        /* const newProduct = {
             id : faker.string.uuid(),
             isBlock: faker.datatype.boolean(),
             ...data
         }
         this.products.push(newProduct)
+        return newProduct */
+
+        // Con model.Product
+        const newProduct = await models.Product.create(data)
         return newProduct
     }
 
@@ -85,13 +90,14 @@ class ProductServices {
         const [data] = await sequelize.query(query)
         return data */
 
-        const rta = models.Product.findAll()
+        const rta = await models.Product.findAll()
         return rta
     }
 
     // retorna el producto con el id pasado como parámetro
     async findOne(id) {
-        // Encuentra el artículo que tiene un id pasado como parámetro
+        // Antes de models.Product
+        /* // Encuentra el artículo que tiene un id pasado como parámetro
         const product = this.products.find(item => item.id === id)
         if (!product) {
             throw boom.notFound('product not found')
@@ -101,13 +107,21 @@ class ProductServices {
         if (product.isBlock) {
             throw boom.conflict('product not found by conflict')
         }
+        return product */
+
+        // Con models.Product
+        const product = await models.Product.findByPk(id)
+        if (!product) {
+            throw boom.notFound('product nor found')
+        }
         return product
     }
 
     // actualiza los parámetros del producto cuyo id es el pasado como
     // parámetro y retorna el artículo actualizado
     async update(id, changes) {
-        const index = this.products.findIndex(item => item.id === id)
+        // Antes de models.Product
+        /* const index = this.products.findIndex(item => item.id === id)
         if (index === -1) {
             // throw new Error('product not found')
             // Se usa boom para indicar que este error debe ser tratado como
@@ -124,20 +138,31 @@ class ProductServices {
             ...product,
             ...changes
         }
-        return this.products[index]
+        return this.products[index] */
+
+        // Con models.Product
+        const product = await this.findOne(id)
+        const rta = await product.update(changes)
+        return rta
     }
 
     // elimina el artículo con el id pasado como parámetro y retorna un
     // mensaje de true.
     async delete(id) {
-        const index = this.products.findIndex(item => item.id === id)
+        // Antes de models.Product
+        /* const index = this.products.findIndex(item => item.id === id)
         if (index === -1) {
             // throw new Error('product not found')
             throw boom.notFound('product not found')
 
         }
         this.products.splice(index, 1)
-        return {message: true}
+        return {message: true} */
+
+        // Con models.Product
+        const product = await this.findOne(id)
+        await product.destroy()
+        return {id}
     }
 }
 

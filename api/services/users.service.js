@@ -100,7 +100,7 @@ class UserServices {
 
         // Después de models.user
         // find by primary key
-        const user = models.User.findByPk(id)
+        const user = await models.User.findByPk(id)
         if (!user) {
             throw boom.notFound('user not found')
         }
@@ -131,7 +131,7 @@ class UserServices {
         return this.users[index] */
 
         // Con models.User
-        const user = this.findOne(id)
+        const user = await this.findOne(id)
         const rta = await user.update(changes)
         return rta
     }
@@ -150,7 +150,7 @@ class UserServices {
         return {message: true} */
 
         // Con models.User
-        const user = this.findOne(id)
+        const user = await this.findOne(id)
         await user.destroy()
         return {id}
     }

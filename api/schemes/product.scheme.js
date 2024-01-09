@@ -6,9 +6,10 @@ Se definen las características de los datos que estaremos enviando a través de
 
 
 const id = Joi.number().integer()
-const name = Joi.string().min(3).max(15)
+const name = Joi.string()
 const price = Joi.number().integer().min(10)
-const image = Joi.string().uri()
+const image = Joi.string()
+const createdAt = Joi.string()
 const isBlock = Joi.boolean()
 
 
@@ -19,7 +20,8 @@ const createProductScheme = Joi.object({
     name: name.required(),
     price: price.required(),
     image: image.required(),
-    // isBlock: isBlock.required()
+    createdAt: createdAt.required(),
+    isBlock: isBlock.required()
 })
 
 // Scheme de actualización
