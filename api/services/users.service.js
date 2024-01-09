@@ -5,9 +5,13 @@ const boom = require('@hapi/boom')
 // const getConnection = require('../../libs/postgres')
 // const pool = require('../../libs/postgres.pool')
 
-// importamos sequilize que reemplazará a pool
-const sequelize = require('../../libs/sequelize')
+/* // importamos sequilize que reemplazará a pool
+const sequelize = require('../../libs/sequelize') */
 
+// importamos modelos de libs/sequelize.
+// Al ejecutar setupModels(sequelize) y sequelize.sync(),
+// Se genera models dentro del sequilize exportado en este archivo
+const {models} = require('../../libs/sequelize')
 
 class UserServices {
     constructor() {
@@ -63,15 +67,17 @@ class UserServices {
         const rta = await this.pool.query(query)
         return rta.rows */
 
-        // Optimización usando sequelize
+        /* // Optimización usando sequelize
         const query = 'SELECT * FROM tasks'
         const [data] = await sequelize.query(query)
-        return data
+        return data */
 
-    }
-
-    async findOne(id) {
-        return this.users.find(user => user.id === id)
+        // De esta forma se usa el modelo configurado en db/models
+        // con static config(sequelize)
+        // User es el nombre del objeto retornado por el método config() del
+        // modelo user.models.js
+        const rta = await models.User.findAll()
+        return rta
     }
 
     async findOne(id) {

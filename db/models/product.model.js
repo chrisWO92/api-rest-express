@@ -1,29 +1,25 @@
-/*
-Esquemas y modelos de Bases de Datos
-*/
-
 const {Model, DataTypes, Sequelize} = require('sequelize')
 
-// normalmente se define el nombre en minúscula y en plural
-const USER_TABLE = 'users'
+const PRODUCT_TABLE = 'products'
 
-// Definimos estructura de nuestra tabla.
-// Definimos estructura de los campos.
-// Al tener un modelo agnóstico de DB, nos permite usar estos esquemas en cualquier DB
-// que estemos usando, ya sea MySQL, postgres, MariaDB, etc.
-const UserSchema = {
-  id: {
+const ProductSchema = {
+  id : {
     allowNull: false, // No permitir valores nulos
     autoIncrement: true, // Incrementar automáticamente
     primaryKey: true,
     type: DataTypes.INTEGER // Dato tipo entero
   },
-  email: {
+  name: {
     allowNull: false, // No permitir valores nulos
     type: DataTypes.STRING, // Dato tipo string
-    unique: true // Campo único. Un sólo usuario por email
+    unique: true // Campo único. Un producto no se puede repetir.
   },
-  password: {
+  price: {
+    allowNull: false, // No permitir valores nulos
+    type: DataTypes.INTEGER, // Dato tipo string
+
+  },
+  image: {
     allowNull: false, // No permitir valores nulos
     type: DataTypes.STRING, // Dato tipo string
   },
@@ -32,14 +28,14 @@ const UserSchema = {
     type: DataTypes.DATE, // Dato tipo date
     field: 'created_at', // Definimos cómo queremos que aparezca este campo en la base de datos
     defaultValue: DataTypes.NOW // Por defecto se define la hora y la fecha en la que estamos ingresando los datos
+  },
+  isBlock: {
+    allowNull: false, // No permitir valores nulos
+    type: DataTypes.BOOLEAN, // Dato tipo booleano
   }
 }
 
-// Definimos una clase que hereda métodos de Model (Sequelize).
-// Heredará métodos como buscar, filtrar, y otras cosas, para que sea sencillo
-// hacer queries
-class User extends Model {
-  // static sirve para no tener que declarar el objeto para invocar este método
+class Product extends Model {
   static associate() {
     // models
   }
@@ -50,13 +46,11 @@ class User extends Model {
     // La configuración retorna lo siguiente:
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: 'User',
+      tableName: PRODUCT_TABLE,
+      modelName: 'Product',
       timestamps: false // No permite la creación de campos por defecto
     }
   }
-
 }
 
-module.exports = {USER_TABLE, UserSchema, User}
-
+module.exports = {PRODUCT_TABLE, ProductSchema, Product}
