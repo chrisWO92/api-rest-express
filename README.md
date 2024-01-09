@@ -174,4 +174,4 @@ Y en el archivo `user.service.js`, en el método `find()`, reemplazamo el uso de
 
 Con esto ya tendremos creado nuestro primer modelo ORM y estaremos usando programacón orientadaa objetos para hacer nuestras consultas.
 
-ESTOY EN PROCESO DE HACER EL CRUD CON MODELS DE SEQUELIZE
+ESTOY EN PROCESO DE HACER EL CRUD CON MODELS DE SEQUELIZE. FALTA EL DE CATEGORÍAS Y HACER ALGUNA OTTRA TABLA.
