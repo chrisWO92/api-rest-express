@@ -5,7 +5,7 @@ Se definen las características de los datos que estaremos enviando a través de
 */
 
 
-const id = Joi.string().uuid()
+const id = Joi.number().integer()
 const description = Joi.string()
 //const price = Joi.number().integer().min(10)
 //const image = Joi.string().uri()

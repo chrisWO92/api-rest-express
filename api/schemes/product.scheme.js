@@ -9,7 +9,7 @@ const id = Joi.number().integer()
 const name = Joi.string()
 const price = Joi.number().integer().min(10)
 const image = Joi.string()
-const createdAt = Joi.string()
+// const createdAt = Joi.string()
 const isBlock = Joi.boolean()
 
 
@@ -20,7 +20,7 @@ const createProductScheme = Joi.object({
     name: name.required(),
     price: price.required(),
     image: image.required(),
-    createdAt: createdAt.required(),
+    // createdAt: createdAt.required(),
     isBlock: isBlock.required()
 })
 

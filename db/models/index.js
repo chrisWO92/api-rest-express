@@ -7,6 +7,8 @@ con nuestros modelos
 
 const {UserSchema, User} = require('./user.model')
 const {ProductSchema, Product} = require('./product.model')
+const {CategorySchema, Category} = require('./category.model')
+
 // const {UserSchema, User} = require('./user.model')
 // const {UserSchema, User} = require('./user.model')
 // const {UserSchema, User} = require('./user.model')
@@ -17,7 +19,7 @@ function setupModels (sequelize) {
     // método config() que sirve para retornar parámetros de configuración
     User.init(UserSchema, User.config(sequelize))
     Product.init(ProductSchema, Product.config(sequelize))
-    // User.init(UserSchema, User.config(sequelize))
+    Category.init(CategorySchema, Category.config(sequelize))
     // User.init(UserSchema, User.config(sequelize))
     // User.init(UserSchema, User.config(sequelize))
     // Así se configurarían dentro de setupModels

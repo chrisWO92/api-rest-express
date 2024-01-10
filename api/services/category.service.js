@@ -2,15 +2,19 @@ const {faker} = require('@faker-js/faker')
 const boom = require('@hapi/boom')
 
 // importamos sequilize que reemplazará a pool
-const sequelize = require('../../libs/sequelize')
+// Al usar models.Category, ya no necesitamos sequelize
+// const sequelize = require('../../libs/sequelize')
+
+// Importamos models
+const {models} = require('../../libs/sequelize')
 
 class CategoryServices {
     constructor() {
         this.categories = []
-        this.generate()
+        // this.generate()
     }
 
-    generate() {
+    /* generate() {
         for (let i = 0; i < 10; i++) {
             this.categories.push({
                 id: faker.string.uuid(),
@@ -18,14 +22,19 @@ class CategoryServices {
                 isBlock: faker.datatype.boolean(),
             })
         }
-    }
+    } */
 
-    create(data) {
-        const newCategory = {
+    async create(data) {
+      // Antes de models.Category
+        /* const newCategory = {
             id : faker.string.uuid(),
             ...data
         }
         this.categories.push(newCategory)
+        return newCategory */
+
+        // Con models.Category
+        const newCategory = await models.Category.create(data)
         return newCategory
     }
 
@@ -36,14 +45,20 @@ class CategoryServices {
             }, 3000)
         }) */
 
-        // Optimización usando sequelize
+        // Antes del models.Category
+        /* // Optimización usando sequelize
         const query = 'SELECT * FROM tasks'
         const [data] = await sequelize.query(query)
-        return data
+        return data */
+
+        // Con models.Category
+        const rta = await models.Category.findAll()
+        return rta
 
     }
     async findOne(id) {
-        // Encuentra la categoría que tiene un id pasado como parámetro
+        // Antes del models.Category
+        /* // Encuentra la categoría que tiene un id pasado como parámetro
         const category = this.categories.find(category => category.id === id)
         if (!category) {
             throw boom.notFound('category not found')
@@ -53,13 +68,21 @@ class CategoryServices {
         if (category.isBlock) {
             throw boom.conflict('category not found by conflict')
         }
+        return category */
+
+        // Con models.Category
+        const category = await models.Category.findByPk(id)
+        if (!category) {
+          throw boom.notFound('category not found')
+        }
         return category
     }
 
     // actualiza los parámetros de la categoría cuyo id es el pasado como
     // parámetro y retorna la categoría actualizada
     async update(id, changes) {
-        const index = this.categories.findIndex(category => category.id === id)
+        // Antes de models.Category
+        /* const index = this.categories.findIndex(category => category.id === id)
         if (index === -1) {
             // throw new Error('category not found')
             // Se usa boom para indicar que este error debe ser tratado como
@@ -76,20 +99,31 @@ class CategoryServices {
             ...category,
             ...changes
         }
-        return this.categories[index]
+        return this.categories[index] */
+
+        // Con models.Category
+        const category = await this.findOne(id)
+        const rta = await category.update(changes)
+        return rta
     }
 
     // elimina la categoría con el id pasado como parámetro y retorna un
     // mensaje de true.
     async delete(id) {
-        const index = this.categories.findIndex(category => category.id === id)
+        // Antes del models.Category
+        /* const index = this.categories.findIndex(category => category.id === id)
         if (index === -1) {
             // throw new Error('category not found')
             throw boom.notFound('category not found')
 
         }
         this.categories.splice(index, 1)
-        return {message: true}
+        return {message: true} */
+
+        // Con models.Category
+        const category = await this.findOne(id)
+        await category.destroy()
+        return {id}
     }
 }
 

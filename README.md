@@ -174,4 +174,6 @@ Y en el archivo `user.service.js`, en el método `find()`, reemplazamo el uso de
 
 Con esto ya tendremos creado nuestro primer modelo ORM y estaremos usando programacón orientadaa objetos para hacer nuestras consultas.
 
-ESTOY EN PROCESO DE HACER EL CRUD CON MODELS DE SEQUELIZE. FALTA EL DE CATEGORÍAS Y HACER ALGUNA OTTRA TABLA.
+### Creando los CRUDS en nuestras tablas
+Luego terminamos de hacer todos los CRUDS en las tablas que contemplamos para este modelo. El proceso consistió en crear el modelo en `/db/models` para cada tabla, exportarlo y usarlo en el index.js que está también en `/db/models` para pasarselo al `setupModels`. Con esto basta para que la tabla se cree en el archivo `/libs/sequelize.js` mediante las líneas `setupModels(sequelize); sequelize.sync();`, y para que luego podamos usarlo en el servicio `/services/category.service.js` como `models.Category`
+
