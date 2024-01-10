@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 const routerApi = require('./routes')
 
 // Se importan los middlewares para gestionar errores de la aplicación
-const {logErrors, boomErrorHandler, errorHandler} = require('./middlewares/error.handler')
+const {logErrors, boomErrorHandler, errorHandler, ormErrorHandler} = require('./middlewares/error.handler')
 
 // Se importa CORS
 const cors = require('cors')
@@ -81,6 +81,7 @@ routerApi(app)
 // Primero se loguea, luego verifica si es error tipo boom, y si no, lo muestra en
 // pantalla con el middleware errorHandler.
 app.use(logErrors)
+app.use(ormErrorHandler)
 app.use(boomErrorHandler)
 app.use(errorHandler)
 

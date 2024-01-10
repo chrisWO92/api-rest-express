@@ -8,7 +8,7 @@ Se definen las características de los datos que estaremos enviando a través de
 const id = Joi.number().integer()
 const email = Joi.string()
 const password = Joi.string()
-const createdAt = Joi.string()
+// const createdAt = Joi.string()
 
 
 // Se crean todos los esquemas, definiendo qué información es obligatoria o no
@@ -17,14 +17,14 @@ const createdAt = Joi.string()
 const createUserScheme = Joi.object({
     email: email.required(),
     password: password.required(),
-    createdAt: createdAt.required(),
+    // createdAt: createdAt.required(),
 })
 
 // Scheme de actualización
 const updateUserScheme = Joi.object({
     email: email,
     password: password,
-    createdAt: createdAt
+    // createdAt: createdAt
 })
 
 // Scheme de consulta

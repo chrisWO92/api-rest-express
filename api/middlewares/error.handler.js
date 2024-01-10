@@ -1,3 +1,6 @@
+// Importamos el método ValidationError de sequelize que permite detectar si un
+// error viene del ORM
+const {ValidationError} = require('sequelize')
 
 /* Middleware de tipo error: son aquellos que invocan a next
 con el error como parámetro de la misma. Los errores se gestionan
@@ -24,7 +27,7 @@ function errorHandler (err, req, res, next) {
     })
 }
 
-/* 
+/*
 Middleware para determinar si un error es detectado por la librería boom.
 Si no es así, le pasa el error al siguiente middleware.
 */
@@ -44,4 +47,23 @@ function boomErrorHandler (err, req, res, next) {
     }
 }
 
-module.exports = {logErrors, errorHandler, boomErrorHandler}
+/*
+El siguiente middleware permite detectar si un error tiene origen en el modelo ORM.
+Por ejemplo, el poner varios usuarios con el mismo email generará un error que será
+detectado por este middleware.
+*/
+function ormErrorHandler (err, req, res, next) {
+  // El error es una instancia de ValidationError de sequelize?
+  if (err instanceof ValidationError) {
+    // Si lo es, formatee el error de la siguiente manera
+    res.status(409).json({
+      statusCode: 409,
+      message: err.name,
+      errors: err.errors
+    })
+  }
+  // Si no, siga y maneje el error con el siguiente middleware
+  next(err)
+}
+
+module.exports = {logErrors, errorHandler, boomErrorHandler, ormErrorHandler}

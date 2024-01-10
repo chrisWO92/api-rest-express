@@ -177,3 +177,11 @@ Con esto ya tendremos creado nuestro primer modelo ORM y estaremos usando progra
 ### Creando los CRUDS en nuestras tablas
 Luego terminamos de hacer todos los CRUDS en las tablas que contemplamos para este modelo. El proceso consistió en crear el modelo en `/db/models` para cada tabla, exportarlo y usarlo en el index.js que está también en `/db/models` para pasarselo al `setupModels`. Con esto basta para que la tabla se cree en el archivo `/libs/sequelize.js` mediante las líneas `setupModels(sequelize); sequelize.sync();`, y para que luego podamos usarlo en el servicio `/services/category.service.js` como `models.Category`
 
+### Manejando el error de campo unico generado por los modelos de base de datos
+Por ejemplo, pusimos que al crear usuarios deben tener un correo unico. Si intentamos crear un usuario con un correo ya existente, nos lanzará un error que aún no tenemos gestionado. Por ende, el error nos aparece en la terminal y no en el resultado de Insomnia. 
+
+Para esto, creamos un middleware manejador de errores de tipo ORM en los error.handlers.
+
+
+### Usando MySQL
+Como se mencionó antes, Sequelize es un ORM agnóstico ya que puede ser usado con cualquier tipo de base de datos. De hecho, cambiar a otra DB diferente a Postgres, con otro motor gráfico diferente a pgadmin, es relativamente sencillo.
