@@ -53,10 +53,16 @@ router.post(
   '/',
   // En el segundo argumento de la petición, pasamos el validatorHandler correspondiente
   validatorHandler(createUserScheme, 'body'),
-  async (req, res) => {
-  const body = req.body
-  const newCategory = await services.create(body)
-  res.status(200).json(newCategory)
+  async (req, res, next) => {
+    try {
+        
+        const body = req.body
+        const newCategory = await services.create(body)
+        res.status(200).json(newCategory)
+    } catch (error) {
+      next(error)
+        
+    }
 })
 
 router.patch(

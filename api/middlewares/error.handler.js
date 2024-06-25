@@ -53,6 +53,7 @@ Por ejemplo, el poner varios usuarios con el mismo email generará un error que 
 detectado por este middleware.
 */
 function ormErrorHandler (err, req, res, next) {
+  console.log('ormErrorHandler')
   // El error es una instancia de ValidationError de sequelize?
   if (err instanceof ValidationError) {
     // Si lo es, formatee el error de la siguiente manera
