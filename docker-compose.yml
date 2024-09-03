@@ -28,7 +28,7 @@ services:
     image: mysql:5
     environment:
       - MYSQL_DATABASE=api_express_docker
-      - MYSQL_USER=cristian
+      - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=admin123
       - MYSQL_PORT=3306
     ports:
@@ -40,7 +40,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin 
     environment:
-      - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_ROOT_PSWORD=admin123
       - PMA_HOST=mysql
     ports:
       - 8080:80

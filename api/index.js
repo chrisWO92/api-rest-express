@@ -41,7 +41,7 @@ app.use(cors(options))
 // soportada por la comunidad.
 // faker se instala con npm i @faker-js/faker y e invoca de la siguiente
 // manera:
-const {faker} = require('@faker-js/faker')
+//const {faker} = require('@faker-js/faker')
 
 //cualquier petición siempre tiene un req y un res como parámetro en su callback
 app.get('/api', (req, res) => {

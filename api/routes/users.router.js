@@ -6,7 +6,7 @@ users
 
 const express = require('express')
 const router = express.Router()
-const {faker} = require('@faker-js/faker')
+//const {faker} = require('@faker-js/faker')
 
 const UserServices = require('../services/users.service')
 const services = new UserServices()
@@ -54,14 +54,12 @@ router.post(
   // En el segundo argumento de la petición, pasamos el validatorHandler correspondiente
   validatorHandler(createUserScheme, 'body'),
   async (req, res, next) => {
-    try {
-        
+    try {        
         const body = req.body
         const newCategory = await services.create(body)
         res.status(200).json(newCategory)
     } catch (error) {
-      next(error)
-        
+      next(error)        
     }
 })
 

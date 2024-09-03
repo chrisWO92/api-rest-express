@@ -27,6 +27,11 @@ const UserSchema = {
     allowNull: false, // No permitir valores nulos
     type: DataTypes.STRING, // Dato tipo string
   },
+  /* role:  {
+    allowNull: false, // No permitir valores nulos
+    type: DataTypes.STRING, // Dato tipo string
+    defaultValue: 'customer'
+  }, */
   createdAt: {
     allowNull: false, // No permitir valores nulos
     type: DataTypes.DATE, // Dato tipo date

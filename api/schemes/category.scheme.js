@@ -6,9 +6,9 @@ Se definen las características de los datos que estaremos enviando a través de
 
 
 const id = Joi.number().integer()
-const description = Joi.string()
+const name = Joi.string()
 //const price = Joi.number().integer().min(10)
-//const image = Joi.string().uri()
+const image = Joi.string().uri()
 const isBlock = Joi.boolean()
 
 
@@ -16,16 +16,16 @@ const isBlock = Joi.boolean()
 
 // Scheme de creación
 const createCategoryScheme = Joi.object({
-    description: description.required(),
+    name: name.required(),
     //price: price.required(),
-    //image: image.required(),
-    isBlock: isBlock.required()
+    image: image.required(),
+    //isBlock: isBlock.required()
 })
 
 // Scheme de actualización
 const updateCategoryScheme = Joi.object({
-    description: description,
-    isBlock: isBlock,
+    name: name,
+    image: image,
 })
 
 // Scheme de consulta

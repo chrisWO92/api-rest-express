@@ -185,3 +185,25 @@ Para esto, creamos un middleware manejador de errores de tipo ORM en los error.h
 
 ### Usando MySQL
 Como se mencionó antes, Sequelize es un ORM agnóstico ya que puede ser usado con cualquier tipo de base de datos. De hecho, cambiar a otra DB diferente a Postgres, con otro motor gráfico diferente a pgadmin, es relativamente sencillo.
+
+Lo que se hace es crear la imágen de mysql y de phpmyadmin en el docker-compose.yml y se instala el driver para mysql con `npm instal --save mysql2`.
+
+Luego se deben cambiar algunas cosas en el archivo .env y en el archivo sequelize.js. Donde dice "postgres" se debe reemplazar por "mysql" y así funciona.
+
+### Migraciones
+Mantienen historial de esquema de cambios que vamos haciendo en nuestra base de datos. Siempre que vamos haciendo cambios debemos ir llevandolo en un sistema de migraciones. Es un sistema de trackeo de cambios a la estructura de la base de datos.
+
+Hasta el momento estábamos supliendo esta función mediante la línea "sequelize.sync()" en el archivo sequelize.js. Pero eso no se recomienda para entornos de producción, por lo cual vamos a cambiarlo.
+
+Esto se hace con una librería particular de sequelize, que se instala con el siguiente comando:
+npm i sequelize-cli --save-dev
+
+Luego tenemos que crear un archivo de configuración .sequelizerc, que tiene un module.exports con toda la informaciòn que necesitamos para crear el entorno de migraciones. Este archivo define un config.js, una carpeta models, una carpeta migrations y una seeders dentro ded la carpeta models. 
+
+Con eso ya se tendría el entorno listo para correr migraciones, e incluso una carpeta en donde guardarlas. Se configuró donde estarán los set de datos. Ya no se usa el .sync.
+
+COn .sync no podemos hacer modificaciones a nuestro modelo.
+
+Para poder empezar a correr migraciones debemos crear un script en el package.json "migration:generate", y luego ejecutar en la terminal "npm run migrations:generate". Por ejemplo si queremos crear migraciones para la acción de crear usuario, tenemos que ejecutar "npm run migrations:generate create-user.js"
+
+Además de un createTable también podemos implementar un afterTable (agregar columna en tabla) en nuestra app de migraciones.

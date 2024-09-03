@@ -6,7 +6,7 @@ a productos
 
 const express = require('express')
 const router = express.Router()
-const {faker} = require('@faker-js/faker')
+//const {faker} = require('@faker-js/faker')
 
 // Invocamos el ProductServices y creamos una instancia.
 // Esto permite generarun array de artículos que se mantendrá

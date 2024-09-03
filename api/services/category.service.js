@@ -1,4 +1,4 @@
-const {faker} = require('@faker-js/faker')
+//const {faker} = require('@faker-js/faker')
 const boom = require('@hapi/boom')
 
 // importamos sequilize que reemplazará a pool
@@ -56,27 +56,7 @@ class CategoryServices {
         return rta
 
     }
-    async findOne(id) {
-        // Antes del models.Category
-        /* // Encuentra la categoría que tiene un id pasado como parámetro
-        const category = this.categories.find(category => category.id === id)
-        if (!category) {
-            throw boom.notFound('category not found')
-        }
-        // Se captura y se emite un error si el usuario intenta acceder a la información
-        // de una categoría bloqueada
-        if (category.isBlock) {
-            throw boom.conflict('category not found by conflict')
-        }
-        return category */
-
-        // Con models.Category
-        const category = await models.Category.findByPk(id)
-        if (!category) {
-          throw boom.notFound('category not found')
-        }
-        return category
-    }
+    an
 
     // actualiza los parámetros de la categoría cuyo id es el pasado como
     // parámetro y retorna la categoría actualizada

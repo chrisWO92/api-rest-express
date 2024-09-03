@@ -10,6 +10,9 @@ const express = require('express')
 const productosRouter = require('./productos.router')
 const usersRouter = require('./users.router')
 const categoriesRouter = require('./categories.router')
+// nueva línea
+const customerRouter = require('./customer.router')
+
 
 function routerApi(app) {
     // Se crea un enrutador y se le pasa como parámetro a app.use().
@@ -21,6 +24,10 @@ function routerApi(app) {
     router.use('/productos', productosRouter)
     router.use('/users', usersRouter)
     router.use('/categories', categoriesRouter)
+    
+    // nueva línea
+    router.use('/customer', customerRouter)
+
 
 }
 

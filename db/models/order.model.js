@@ -1,45 +1,24 @@
 const {Model, DataTypes, Sequelize} = require('sequelize')
-const { CATEGORY_TABLE } = require('./category.model')
+const { CUSTOMER_TABLE } = require('./customer.model')
 
-const PRODUCT_TABLE = 'products'
+const ORDER_TABLE = 'orders'
 
-const ProductSchema = {
+const OrderSchema = {
   id : {
     allowNull: false, // No permitir valores nulos
     autoIncrement: true, // Incrementar automáticamente
     primaryKey: true,
     type: DataTypes.INTEGER // Dato tipo entero
   },
-  name: {
-    allowNull: false, // No permitir valores nulos
-    type: DataTypes.STRING, // Dato tipo string
-    // unique: true // Campo único. Un producto no se puede repetir.
-  },
-  price: {
-    allowNull: false, // No permitir valores nulos
-    type: DataTypes.INTEGER, // Dato tipo string
-
-  },
-  image: {
-    allowNull: false, // No permitir valores nulos
-    type: DataTypes.STRING, // Dato tipo string
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
+  
   createdAt: {
     allowNull: false, // No permitir valores nulos
     type: DataTypes.DATE, // Dato tipo date
     field: 'created_at', // Definimos cómo queremos que aparezca este campo en la base de datos
     defaultValue: DataTypes.NOW // Por defecto se define la hora y la fecha en la que estamos ingresando los datos
   },
-  isBlock: {
-    allowNull: false, // No permitir valores nulos
-    type: DataTypes.BOOLEAN, // Dato tipo booleano
-  },
-  categoryId: { 
-    field: 'category_id', 
+  customerId: { 
+    field: 'customer_id', 
     allowNull: false, 
     type: DataTypes.INTEGER, 
     //unique: true, ya no será único
@@ -48,7 +27,7 @@ const ProductSchema = {
     la tabla de usuario
     */
     references: { 
-        model: CATEGORY_TABLE, 
+        model: CUSTOMER_TABLE, 
         key: 'id' 
     }, 
     /* 
@@ -59,28 +38,45 @@ const ProductSchema = {
     Y si se elimina una fila, el siguiente comportamiento
     */
     onDelete: 'SET NULL' 
-}
+  },
+  total: {
+    type: DataTypes.VIRTUAL, // campo virtual, no aparecerá en insomis
+    get() {
+      if (this.items.length > 0) {
+        return this.items.reduce((total, item) => {
+          return total + (item.price * item.OrderProduct.amount)
+        }, 0)
+      }
+      return 0
+    }
+  }
 }
 
-class Product extends Model {
+class Order extends Model {
   static associate(models) {
     // models
-    this.belongsTo(models.Category, 
-      {as: 'category'}
+    this.belongsTo(models.Customer, 
+        // le asigno un alias
+      {as: 'customer'}
     )
+    this.belongsToMany(models.Product, {
+        as: 'items',
+        through: models.OrderProduct,
+        foreignKey: 'orderId',
+        otherKey: 'productId'
+    })
   }
 
   // Método para hacer la configuración del modelo.
   // Lepasamos la conexión como parámetro
-  static config(sequelize) {
-    // La configuración retorna lo siguiente:
+  static config(sequelize) {    
     return {
       sequelize,
-      tableName: PRODUCT_TABLE,
-      modelName: 'Product',
+      tableName: ORDER_TABLE,
+      modelName: 'Order',
       timestamps: false // No permite la creación de campos por defecto
     }
   }
 }
 
-module.exports = {PRODUCT_TABLE, ProductSchema, Product}
+module.exports = {ORDER_TABLE, OrderSchema, Order}

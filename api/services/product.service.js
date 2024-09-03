@@ -6,7 +6,7 @@ Es decir, los endpoints del CRUD que habíamos definido en los archivos de /rout
 de esta clase para crear, leer, actualizar y eliminar datos.
 */
 
-const {faker} = require('@faker-js/faker')
+//const {faker} = require('@faker-js/faker')
 
 // Importamos el manejador de errores
 const boom = require('@hapi/boom')
@@ -72,26 +72,17 @@ class ProductServices {
     }
 
     // retorna todos los productos
-    async find() {
-      // Antes de usar pg
-        /* return new Promise((res, rej) => {
-            setTimeout(() => {
-                res(this.products)
-            }, 3000)
-        }) */
-
-        /* // Usando pg
-        const query = 'SELECT * FROM tasks'
-        const rta = await this.pool.query(query)
-        return rta.rows */
-
-        /* // Optimización usando sequelize
-        const query = 'SELECT * FROM tasks'
-        const [data] = await sequelize.query(query)
-        return data */
-
-        const rta = await models.Product.findAll()
-        return rta
+    async find(query) {
+        const options = {
+            include: ['category'],
+        }
+        const { limit, offset } = query
+        if (limit && offset) {
+            options.limit = limit
+            options.offset = offset
+        }
+        const products = await models.Product.findAll(options)
+        return products
     }
 
     // retorna el producto con el id pasado como parámetro

@@ -1,4 +1,4 @@
-const {faker} = require('@faker-js/faker')
+//const {faker} = require('@faker-js/faker')
 const boom = require('@hapi/boom')
 
 // Importamos la librería que conecta con la DB
